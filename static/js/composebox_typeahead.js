@@ -3,6 +3,7 @@ import _ from "lodash";
 
 import pygments_data from "../generated/pygments_data.json";
 import * as typeahead from "../shared/js/typeahead";
+import render_topic_typeahead from "../templates/topic_typeahead.hbs";
 
 import * as compose from "./compose";
 import * as compose_pm_pill from "./compose_pm_pill";
@@ -1125,10 +1126,68 @@ export function initialize() {
         },
         sorter(items) {
             const sorted = typeahead_helper.sorter(this.query, items, (x) => x);
-            if (sorted.length > 0 && !sorted.includes(this.query)) {
+            if (sorted.length >= 0 && !sorted.includes(this.query)) {
                 sorted.unshift(this.query);
             }
             return sorted;
+        },
+        process(items) {
+            // We are overriding the default process and render functions to
+            // avoid making an additional database query as item_list contains
+            // all the existing topics in a stream. This is passed to the
+            // render function to help determine if the query is new or not.
+
+            const item_list = $.grep(items, (item) => this.matcher(item));
+
+            items = this.sorter(item_list);
+
+            if (!items.length) {
+                return this.shown ? this.hide() : this;
+            }
+            if (this.automated()) {
+                this.select();
+                this.lookup();
+                return this;
+            }
+            return this.render(items.slice(0, this.options.items), item_list).show();
+        },
+        render(items, item_list) {
+            const $items = $(items).map((index, item) => {
+                const $i = $(this.options.item).data("typeahead-value", item);
+
+                // If topic isn't in the topic_list, that means that the current
+                // query is a new topic and should include a new indicator.
+                // Since the query is always first to be suggested, items
+                // of first index should take new indicator.
+                if (!item_list.includes(items[0]) && index === 0) {
+                    $i.find("a")
+                        .html(
+                            render_topic_typeahead({
+                                topic: item,
+                                is_new: true,
+                            }),
+                        )
+                        .addClass("new-topic-typeahead");
+                    // Everything else can be suggested without the new indicator.
+                } else {
+                    $i.find("a").html(
+                        render_topic_typeahead({
+                            topic: item,
+                            is_new: false,
+                        }),
+                    );
+                }
+                return $i[0];
+            });
+
+            // Since appending items never overrides the child in the element,
+            // The menu is emptied before inserting the array of child element.
+            $items.first().addClass("active");
+            this.$menu.empty().append($items);
+            return this;
+        },
+        header() {
+            return "<em>Start a new topic or select one from the list.</em>";
         },
     });
 

@@ -138,6 +138,8 @@ import {get_string_diff} from "../../js/util";
     this.trigger_selection = this.options.trigger_selection || this.trigger_selection;
     this.on_move = this.options.on_move;
     this.on_escape = this.options.on_escape;
+    this.process = this.options.process || this.process;
+    this.render = this.options.render || this.render;
     this.header = this.options.header || this.header;
 
     if (this.fixed) {

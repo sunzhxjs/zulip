@@ -3133,3 +3133,12 @@ select.invite-as {
         but we don't want it to have an outline when focused anywhere in the app. */
     outline: none;
 }
+
+.new-topic-typeahead {
+    display: flex !important;
+    justify-content: space-between;
+
+    > strong {
+        margin-right: 14px;
+    }
+}

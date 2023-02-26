@@ -246,7 +246,8 @@ export function initialize() {
         send_presence_to_server(true);
     }
 
-    util.call_function_periodically(get_full_presence_list_update, ACTIVE_PING_INTERVAL_MS);
+    //Stop periodically post status
+    //util.call_function_periodically(get_full_presence_list_update, ACTIVE_PING_INTERVAL_MS);
 
     // Let the server know we're here, but pass "false" for
     // want_redraw, since we just got all this info in page_params.

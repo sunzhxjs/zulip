@@ -346,7 +346,7 @@ export function filter_by_word_prefix_match(
                 lower_name.startsWith(search_term) ||
                 new RegExp(word_separator_regex.source + _.escapeRegExp(search_term)).test(
                     lower_name,
-                )
+                ) || lower_name.indexOf(search_term) > -1
             );
         }),
     );

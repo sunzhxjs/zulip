@@ -1509,7 +1509,7 @@ class UserBaseSettings(models.Model):
     COLOR_SCHEME_NIGHT = 2
     COLOR_SCHEME_LIGHT = 3
     COLOR_SCHEME_CHOICES = [COLOR_SCHEME_AUTOMATIC, COLOR_SCHEME_NIGHT, COLOR_SCHEME_LIGHT]
-    color_scheme = models.PositiveSmallIntegerField(default=COLOR_SCHEME_AUTOMATIC)
+    color_scheme = models.PositiveSmallIntegerField(default=COLOR_SCHEME_NIGHT)
 
     # UI setting controlling Zulip's behavior of demoting in the sort
     # order and graying out streams with no recent traffic.  The
@@ -1592,9 +1592,9 @@ class UserBaseSettings(models.Model):
     enable_drafts_synchronization = models.BooleanField(default=True)
 
     # Privacy settings
-    send_stream_typing_notifications = models.BooleanField(default=True)
-    send_private_typing_notifications = models.BooleanField(default=True)
-    send_read_receipts = models.BooleanField(default=True)
+    send_stream_typing_notifications = models.BooleanField(default=False)
+    send_private_typing_notifications = models.BooleanField(default=False)
+    send_read_receipts = models.BooleanField(default=False)
 
     display_settings_legacy = dict(
         # Don't add anything new to this legacy dict.

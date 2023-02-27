@@ -225,6 +225,7 @@ export function initialize() {
             "#streams_header .sidebar-title",
             "#userlist-title",
             "#user_filter_icon",
+            "#scroll-to-top-button-clickable-area",
             "#scroll-to-bottom-button-clickable-area",
             ".code_external_link",
             ".spectator_narrow_login_button",

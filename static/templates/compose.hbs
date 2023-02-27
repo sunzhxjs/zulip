@@ -1,4 +1,12 @@
 <div id="compose-content">
+    <div id="scroll-to-top-button-container" aria-hidden="true">
+        <div id="scroll-to-top-button-clickable-area" data-tooltip-template-id="scroll-to-top-button-tooltip">
+            <div id="scroll-to-top-button">
+                <i class="fa fa-chevron-up"></i>
+            </div>
+        </div>
+        <template id="scroll-to-top-button-tooltip">{{t 'Scroll to top' }} <span class="hotkey-hint">({{{scroll_to_top_key_html}}})</span></template>
+    </div>
     {{!-- scroll to bottom button is not part of compose but
     helps us align it at various screens sizes with
     minimal css and no JS. We keep it `position: absolute` to prevent

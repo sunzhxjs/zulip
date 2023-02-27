@@ -3173,8 +3173,8 @@ div.topic_edit_spinner .loading_indicator_spinner {
     }
 
     #scroll-to-bottom-button-clickable-area {
-        width: 60px;
-        height: 60px;
+        width: 50px;
+        height: 50px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -3200,6 +3200,56 @@ div.topic_edit_spinner .loading_indicator_spinner {
             }
         }
     }
+}
+
+#scroll-to-top-button-container {
+    display: block;
+    position: absolute;
+    bottom: 91px;
+    right: 0;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 500ms, opacity 500ms ease-in-out;
+
+    &.show {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    #scroll-to-top-button-clickable-area {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        &:hover #scroll-to-top-button {
+            background: hsl(240, 96%, 68%);
+        }
+
+        #scroll-to-top-button {
+            text-align: center;
+            width: 40px;
+            height: 40px;
+            background: hsl(240, 96%, 68%, 0.5);
+            border-radius: 50%;
+
+            i {
+                color: hsl(0, 0%, 100%);
+                margin: 0 auto;
+                font-size: 21px;
+                position: relative;
+                top: 8px;
+            }
+        }
+    }
+}
+
+.tooltip._left_arrow {
+    position: relative;
+    top: -1px;
+    font-weight: 600;
 }
 
 .tooltip_right_arrow {

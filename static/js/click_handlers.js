@@ -265,6 +265,13 @@ export function initialize() {
         window.location.href = $(this).attr("href");
     });
 
+    $("body").on("click", "#scroll-to-top-button-clickable-area", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        navigate.to_home();
+    });
+
     $("body").on("click", "#scroll-to-bottom-button-clickable-area", (e) => {
         e.preventDefault();
         e.stopPropagation();

@@ -138,6 +138,50 @@ export function hide_top_of_narrow_notices() {
     hide_history_limit_notice();
 }
 
+let hide_scroll_to_top_timer;
+export function hide_scroll_to_top() {
+    const $show_scroll_to_top_button = $("#scroll-to-top-button-container");
+    if (message_viewport.at_top() || message_lists.current.empty()) {
+        // If first message is visible, just hide the
+        // scroll to top button.
+        $show_scroll_to_top_button.removeClass("show");
+        return;
+    }
+
+    // Wait before hiding to allow user time to click on the button.
+    hide_scroll_to_top_timer = setTimeout(() => {
+        // Don't hide if user is hovered on it.
+        if (
+            //!narrow_state.narrowed_by_topic_reply() &&
+            !$show_scroll_to_top_button.get(0).matches(":hover")
+        ) {
+            $show_scroll_to_top_button.removeClass("show");
+        }
+    }, 3000);
+}
+
+export function show_scroll_to_top_button() {
+    if (message_viewport.at_top() || narrow_state.topic() == null) {
+        // Only show scroll to top button when
+        // first message is not visible in the
+        // current scroll position.
+        return;
+    }
+
+    clearTimeout(hide_scroll_to_top_timer);
+    $("#scroll-to-top-button-container").addClass("show");
+}
+
+$(document).on("keydown", (e) => {
+    if (e.shiftKey || e.ctrlKey || e.metaKey) {
+        return;
+    }
+
+    // Hide scroll to top button on any keypress.
+    // Keyboard users are very less likely to use this button.
+    $("#scroll-to-top-button-container").removeClass("show");
+});
+
 let hide_scroll_to_bottom_timer;
 export function hide_scroll_to_bottom() {
     const $show_scroll_to_bottom_button = $("#scroll-to-bottom-button-container");
@@ -152,7 +196,7 @@ export function hide_scroll_to_bottom() {
     hide_scroll_to_bottom_timer = setTimeout(() => {
         // Don't hide if user is hovered on it.
         if (
-            !narrow_state.narrowed_by_topic_reply() &&
+            //!narrow_state.narrowed_by_topic_reply() &&
             !$show_scroll_to_bottom_button.get(0).matches(":hover")
         ) {
             $show_scroll_to_bottom_button.removeClass("show");
@@ -188,6 +232,7 @@ export function is_actively_scrolling() {
 
 export function scroll_finished() {
     actively_scrolling = false;
+    hide_scroll_to_top();
     hide_scroll_to_bottom();
 
     if (!$("#message_feed_container").hasClass("active")) {
@@ -228,6 +273,7 @@ function scroll_finish() {
     // Don't present the "scroll to bottom" widget if the current
     // scroll was triggered by the keyboard.
     if (!keyboard_triggered_current_scroll) {
+        show_scroll_to_top_button();
         show_scroll_to_bottom_button();
     }
     keyboard_triggered_current_scroll = false;

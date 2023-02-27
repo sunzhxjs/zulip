@@ -444,6 +444,11 @@ export function initialize() {
     });
     update_scroll_to_bottom_position.observe(document.querySelector("#compose"));
 
+    const update_scroll_to_top_position = new ResizeObserver(() => {
+        $("#scroll-to-top-button-container").css("bottom", $("#compose").outerHeight() + 50);
+    });
+    update_scroll_to_top_position.observe(document.querySelector("#compose"));
+
     upload.feature_check($("#compose .compose_upload_file"));
 
     $("#compose-all-everyone").on("click", ".compose-all-everyone-confirm", (event) => {

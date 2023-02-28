@@ -572,7 +572,7 @@ export function activate(raw_operators, opts) {
     search.update_button_visibility();
 
     compose_actions.on_narrow(opts);
-
+    compose_actions.respond_to_message({"trigger": "restore draft"});
     const current_filter = narrow_state.filter();
 
     top_left_corner.handle_narrow_activated(current_filter);

@@ -330,6 +330,14 @@ export function start(msg_type, opts) {
     // Set the recipients with a space after each comma, so it looks nice.
     compose_state.private_message_recipient(opts.private_message_recipient.replace(/,\s*/g, ", "));
 
+    if (opts.trigger === "restore draft" || opts.trigger === "reply button") {
+        const draft = drafts.restore_lastet_draft();
+        if (draft != null) {
+            opts.content = draft.content;
+            opts.draft_id = draft.draft_id;
+        }
+    }
+
     // If the user opens the compose box, types some text, and then clicks on a
     // different stream/topic, we want to keep the text in the compose box
     if (opts.content !== undefined) {

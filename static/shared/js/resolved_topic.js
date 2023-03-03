@@ -1,22 +1,18 @@
 /** The canonical form of the resolved-topic prefix. */
 export const RESOLVED_TOPIC_PREFIX = "✔ ";
+export const PINNED_TOPIC_PREFIX = "📌 ";
 
-/**
- * Pattern for an arbitrary resolved-topic prefix.
- *
- * These always begin with the canonical prefix, but can go on longer.
- */
-// The class has the same characters as RESOLVED_TOPIC_PREFIX.
-// It's designed to remove a weird "✔ ✔✔ " prefix, if present.
-// Compare maybe_send_resolve_topic_notifications in zerver/actions/message_edit.py.
-const RESOLVED_TOPIC_PREFIX_RE = /^✔ [ ✔]*/;
 
 export function is_resolved(topic_name) {
-    return topic_name.startsWith(RESOLVED_TOPIC_PREFIX);
+    return topic_name.startsWith(RESOLVED_TOPIC_PREFIX) || topic_name.indexOf(RESOLVED_TOPIC_PREFIX) == 3;
 }
 
 export function resolve_name(topic_name) {
-    return RESOLVED_TOPIC_PREFIX + topic_name;
+    if (topic_name.startsWith(PINNED_TOPIC_PREFIX)) {
+        return topic_name.slice(0, 3) + RESOLVED_TOPIC_PREFIX + topic_name.slice(3)
+    } else {
+        return RESOLVED_TOPIC_PREFIX + topic_name;
+    }
 }
 
 /**
@@ -25,7 +21,7 @@ export function resolve_name(topic_name) {
  * If the topic is already not a resolved topic, this is the identity.
  */
 export function unresolve_name(topic_name) {
-    return topic_name.replace(RESOLVED_TOPIC_PREFIX_RE, "");
+    return topic_name.replace(RESOLVED_TOPIC_PREFIX, "");
 }
 
 /**

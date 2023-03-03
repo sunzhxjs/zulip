@@ -2,6 +2,7 @@ import autosize from "autosize";
 import $ from "jquery";
 import _ from "lodash";
 
+import * as pinned_topic from "../shared/js/pinned_topic";
 import * as blueslip from "./blueslip";
 import * as channel from "./channel";
 import * as compose_actions from "./compose_actions";
@@ -132,6 +133,10 @@ export function empty_topic_placeholder() {
 export function create_message_object() {
     // Topics are optional, and we provide a placeholder if one isn't given.
     let topic = compose_state.topic();
+    if (pinned_topic.is_pinned(topic) && !page_params.is_admin) {
+        let new_topic = pinned_topic.unpinned_name(topic)
+        compose_state.topic(new_topic);
+    }
     if (topic === "") {
         topic = empty_topic_placeholder();
     }

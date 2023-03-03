@@ -2,6 +2,7 @@ import ClipboardJS from "clipboard";
 import $ from "jquery";
 
 import * as resolved_topic from "../shared/js/resolved_topic";
+import * as pinned_topic from "../shared/js/pinned_topic";
 import render_delete_message_modal from "../templates/confirm_dialog/confirm_delete_message.hbs";
 import render_message_edit_form from "../templates/message_edit_form.hbs";
 import render_topic_edit_form from "../templates/topic_edit_form.hbs";
@@ -622,6 +623,27 @@ export function toggle_resolve_topic(message_id, old_topic_name) {
     });
 }
 
+export function toggle_pin_topic(message_id, old_topic_name) {
+    let new_topic_name;
+    if (pinned_topic.is_pinned(old_topic_name)) {
+        new_topic_name = pinned_topic.unpinned_name(old_topic_name);
+    } else {
+        new_topic_name = pinned_topic.pinned_name(old_topic_name);
+    }
+
+    const request = {
+        propagate_mode: "change_all",
+        topic: new_topic_name,
+        send_notification_to_old_thread: false,
+        send_notification_to_new_thread: true,
+    };
+
+    channel.patch({
+        url: "/json/messages/" + message_id,
+        data: request,
+    });
+}
+
 export function start_inline_topic_edit($recipient_row) {
     const $form = $(
         render_topic_edit_form({
@@ -708,7 +730,14 @@ export function save_inline_topic_edit($row) {
     const message = message_lists.current.get(message_id);
 
     const old_topic = message.topic;
-    const new_topic = $row.find(".inline_topic_edit").val();
+    let new_topic = $row.find(".inline_topic_edit").val();
+    if (!page_params.is_admin) {
+        if (pinned_topic.is_pinned(old_topic) && !pinned_topic.is_pinned(new_topic)) {
+            new_topic = pinned_topic.pinned_name(new_topic);
+        } else if (!pinned_topic.is_pinned(old_topic) && pinned_topic.is_pinned(new_topic)) {
+            new_topic = pinned_topic.unpinned_name(new_topic);
+        }
+    }
     const topic_changed = new_topic !== old_topic && new_topic.trim() !== "";
 
     if (!topic_changed) {

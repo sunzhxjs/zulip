@@ -70,6 +70,16 @@
 
     {{#if is_realm_admin}}
     <li>
+        <a tabindex="0" class="sidebar-popover-toggle-pinned" data-stream-id="{{ stream_id }}" data-topic-name="{{ topic_name }}">
+            <i class="fa fa-map-pin" aria-hidden="true"></i>
+            {{# if topic_is_pinned }}
+            {{t "Mark as unpinned"}}
+            {{else}}
+            {{t "Mark as pinned"}}
+            {{/if}}
+        </a>
+    </li>
+    <li>
         <a tabindex="0" class="sidebar-popover-delete-topic-messages" data-stream-id="{{ stream_id }}" data-topic-name="{{ topic_name }}">
             <i class="fa fa-trash" aria-hidden="true"></i>
             {{t "Delete topic"}}

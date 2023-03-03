@@ -2,6 +2,7 @@ import ClipboardJS from "clipboard";
 import $ from "jquery";
 
 import * as resolved_topic from "../shared/js/resolved_topic";
+import * as pinned_topic from "../shared/js/pinned_topic";
 import render_all_messages_sidebar_actions from "../templates/all_messages_sidebar_actions.hbs";
 import render_delete_topic_modal from "../templates/confirm_dialog/confirm_delete_topic.hbs";
 import render_drafts_sidebar_actions from "../templates/drafts_sidebar_action.hbs";
@@ -305,6 +306,7 @@ function build_topic_popover(opts) {
         can_move_topic,
         is_realm_admin: page_params.is_admin,
         topic_is_resolved: resolved_topic.is_resolved(topic_name),
+        topic_is_pinned: pinned_topic.is_pinned(topic_name),
         color: sub.color,
         has_starred_messages,
     });
@@ -851,6 +853,19 @@ export function register_topic_handlers() {
         const topic_name = $topic_row.attr("data-topic-name");
         message_edit.with_first_message_id(stream_id, topic_name, (message_id) => {
             message_edit.toggle_resolve_topic(message_id, topic_name);
+        });
+
+        hide_topic_popover();
+        e.stopPropagation();
+        e.preventDefault();
+    });
+
+    $("body").on("click", ".sidebar-popover-toggle-pinned", (e) => {
+        const $topic_row = $(e.currentTarget);
+        const stream_id = Number.parseInt($topic_row.attr("data-stream-id"), 10);
+        const topic_name = $topic_row.attr("data-topic-name");
+        message_edit.with_first_message_id(stream_id, topic_name, (message_id) => {
+            message_edit.toggle_pin_topic(message_id, topic_name);
         });
 
         hide_topic_popover();

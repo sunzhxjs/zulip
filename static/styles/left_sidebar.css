@@ -7,7 +7,7 @@ $left_col_size: 19px;
 /* The full topic indentation includes 4px of indent in addition to
    the above (and another 5px of padding not measured here) */
 $topic_indent: calc($far_left_gutter_size + $left_col_size + 4px);
-$topic_resolve_width: 13px;
+$topic_resolve_width: 28px;
 /* Space between section in the left sidebar. */
 $sections_vertical_gutter: 8px;
 $bottom_scrolling_buffer: 25px;
@@ -98,10 +98,10 @@ li.show-more-topics {
     .input-append.topic_search_section {
         padding: 2px 0 2px calc($topic_indent - $topic_resolve_width);
         margin-bottom: 3px;
-        margin-left: 3px;
+        margin-left: 15px;
 
         input {
-            width: calc(100% - 50px);
+            width: calc(100% - 40px);
         }
     }
 
@@ -445,12 +445,14 @@ li.top_left_recent_topics {
     min-width: $topic_resolve_width;
     font-size: 13px;
     height: 18px;
+    padding-right: 3px;
+    justify-content: flex-end;
 }
 
 .conversation-partners,
 .topic-name {
     line-height: 1.3em;
-    max-height: 2.6em;
+    max-height: 2.8em;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -463,6 +465,8 @@ li.top_left_recent_topics {
 .topic-name {
     /* TODO: We should figure out how to remove this without changing the spacing */
     line-height: 1.5em;
+    width: 165px;
+    margin-right: 6px;
 }
 
 .left_sidebar_menu_icon_visible {

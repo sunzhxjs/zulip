@@ -1,4 +1,5 @@
 import * as resolved_topic from "../shared/js/resolved_topic";
+import * as pinned_topic from "../shared/js/pinned_topic";
 
 import * as hash_util from "./hash_util";
 import * as narrow_state from "./narrow_state";
@@ -28,7 +29,8 @@ export function get_list_info(stream_id, zoomed) {
         topic_names = util.filter_by_word_prefix_match(topic_names, search_term, (item) => item);
     }
 
-    const items = [];
+    const commonItems = [];
+    const pinnedItems = [];
 
     const topics_with_unread_mentions = unread.get_topics_with_unread_mentions(stream_id);
 
@@ -36,8 +38,9 @@ export function get_list_info(stream_id, zoomed) {
         const num_unread = unread.num_unread_for_topic(stream_id, topic_name);
         const is_active_topic = active_topic === topic_name.toLowerCase();
         const is_topic_muted = user_topics.is_topic_muted(stream_id, topic_name);
-        const [topic_resolved_prefix, topic_display_name] =
-            resolved_topic.display_parts(topic_name);
+        const [topic_pinned_prefix, topic_pinned_name] = pinned_topic.display_parts(topic_name); 
+        const [topic_resolved_prefix, topic_display_name] = resolved_topic.display_parts(topic_pinned_name);
+
         // Important: Topics are lower-case in this set.
         const contains_unread_mention = topics_with_unread_mentions.has(topic_name.toLowerCase());
 
@@ -104,6 +107,7 @@ export function get_list_info(stream_id, zoomed) {
         const topic_info = {
             topic_name,
             topic_resolved_prefix,
+            topic_pinned_prefix,
             topic_display_name,
             unread: num_unread,
             is_zero: num_unread === 0,
@@ -113,8 +117,18 @@ export function get_list_info(stream_id, zoomed) {
             contains_unread_mention,
         };
 
-        items.push(topic_info);
+        if (topic_pinned_prefix != '') {
+            if (topic_resolved_prefix != '') {
+                pinnedItems.unshift(topic_info);
+            } else {
+                pinnedItems.push(topic_info);
+            }
+        } else {
+            commonItems.push(topic_info);
+        }
     }
+
+    const items = pinnedItems.concat(commonItems);
 
     return {
         items,

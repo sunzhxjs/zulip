@@ -2584,7 +2584,10 @@ div.topic_edit_spinner .loading_indicator_spinner {
     text-align: center;
 }
 
-.message-fade,
+.message-fade {
+    opacity: 0.4;
+}
+
 .user_sidebar_entry.user-fade {
     display: none;
 }

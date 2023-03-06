@@ -2586,7 +2586,7 @@ div.topic_edit_spinner .loading_indicator_spinner {
 
 .message-fade,
 .user_sidebar_entry.user-fade {
-    opacity: 0.4;
+    display: none;
 }
 
 .emoji {

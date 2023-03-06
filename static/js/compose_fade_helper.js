@@ -51,9 +51,9 @@ export function want_normal_display() {
         // the user simply hasn't started typing it yet, but disabling fading here
         // means the feature doesn't help realms where topics aren't mandatory
         // (which is most realms as of this writing).
-        if (focused_recipient.topic === "") {
+        /*if (focused_recipient.topic === "") {
             return true;
-        }
+        }*/
     }
 
     return focused_recipient.type === "private" && focused_recipient.reply_to === "";

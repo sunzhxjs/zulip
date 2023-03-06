@@ -158,7 +158,7 @@ export function start_compose(msg_type) {
 }
 
 export function clear_compose() {
-    compose_fade_helper.clear_focused_recipient();
+    //compose_fade_helper.clear_focused_recipient();
     display_messages_normally();
     update_faded_users();
 }

@@ -248,7 +248,8 @@ def validate_api_key(
     user_profile = access_user_by_api_key(request, api_key, email=role)
     if user_profile.is_incoming_webhook and not allow_webhook_access:
         raise JsonableError(_("This API is not available to incoming webhook bots."))
-
+    if not user_profile.is_bot:
+        raise JsonableError(_("API access is disabled for now."))
     request.user = user_profile
     process_client(request, user_profile, client_name=client_name)
 
@@ -260,7 +261,7 @@ def validate_account_and_subdomain(request: HttpRequest, user_profile: UserProfi
         raise RealmDeactivatedError()
     if not user_profile.is_active:
         raise UserDeactivatedError()
-
+    
     # Either the subdomain matches, or we're accessing Tornado from
     # and to localhost (aka spoofing a request as the user).
     if not user_matches_subdomain(get_subdomain(request), user_profile) and not (
